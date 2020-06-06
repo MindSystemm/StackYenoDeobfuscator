@@ -1,0 +1,8 @@
+C:\Users\nicol\source\repos\StackYenoDeobfuscator\StackYenoDeobfuscator\bin\Debug\StackYenoDeobfuscator.exe.config
+C:\Users\nicol\source\repos\StackYenoDeobfuscator\StackYenoDeobfuscator\bin\Debug\StackYenoDeobfuscator.exe
+C:\Users\nicol\source\repos\StackYenoDeobfuscator\StackYenoDeobfuscator\bin\Debug\StackYenoDeobfuscator.pdb
+C:\Users\nicol\source\repos\StackYenoDeobfuscator\StackYenoDeobfuscator\bin\Debug\dnlib.dll
+C:\Users\nicol\source\repos\StackYenoDeobfuscator\StackYenoDeobfuscator\obj\Debug\StackYenoDeobfuscator.csprojAssemblyReference.cache
+C:\Users\nicol\source\repos\StackYenoDeobfuscator\StackYenoDeobfuscator\obj\Debug\StackYenoDeobfuscator.csproj.CopyComplete
+C:\Users\nicol\source\repos\StackYenoDeobfuscator\StackYenoDeobfuscator\obj\Debug\StackYenoDeobfuscator.exe
+C:\Users\nicol\source\repos\StackYenoDeobfuscator\StackYenoDeobfuscator\obj\Debug\StackYenoDeobfuscator.pdb
