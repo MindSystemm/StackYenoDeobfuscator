@@ -1,4 +1,6 @@
-﻿using dnlib.DotNet;
+﻿using de4dot.blocks;
+using de4dot.blocks.cflow;
+using dnlib.DotNet;
 using dnlib.DotNet.Emit;
 using dnlib.DotNet.Writer;
 using System;
@@ -41,6 +43,7 @@ namespace StackYenoDeobfuscator
             System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
             watch.Start();
             DecryptString(FindDecryptionMethod());
+            CFLow();
             watch.Stop();
             Console.WriteLine("\nDone ! Elapsed time : " + watch.Elapsed.TotalSeconds);
             string SavingPath = module.Kind == ModuleKind.Dll ? args[0].Replace(".dll", "-Obfuscated.dll") : args[0].Replace(".exe", "-Obfuscated.exe");
@@ -77,12 +80,14 @@ namespace StackYenoDeobfuscator
                             if(method.Body.Instructions[i].OpCode == OpCodes.Ldstr)
                             {
                                 string operand = (string)method.Body.Instructions[i].Operand;
-                                stack.Push(operand);
+                                System.Tuple<string, int> tuple = new System.Tuple<string, int>(operand, i);
+                                stack.Push(tuple);
                             }
                             else if(method.Body.Instructions[i].IsLdcI4())
                             {
                                 int operand = method.Body.Instructions[i].GetLdcI4Value();
-                                stack.Push(operand);
+                                System.Tuple<int, int> tuple = new System.Tuple<int, int>(operand, i);
+                                stack.Push(tuple);
                             }
                             else if(method.Body.Instructions[i].OpCode == OpCodes.Call && method.Body.Instructions[i].Operand is MethodDef)
                             {
@@ -90,18 +95,40 @@ namespace StackYenoDeobfuscator
                                 if (op == decryption)
                                 {
                                     //If method found, we just pop the 2 args and we decrypt the string
-                                    int arg = (int)stack.Pop();
-                                    string arg2 = (string)stack.Pop();
-                                    string decrypted = a(arg2, arg);
+                                    System.Tuple<int, int> arg = (System.Tuple<int, int>)stack.Pop();
+                                    System.Tuple<string, int> arg2 = (System.Tuple<string, int>)stack.Pop();
+                                    string decrypted = a(arg2.Item1, arg.Item1);
                                     Console.ForegroundColor = ConsoleColor.Green;
                                     Print(string.Format(" {0} decrypted !", decrypted));
                                     Console.ForegroundColor = ConsoleColor.White;
+                                    method.Body.Instructions[arg.Item2].OpCode = OpCodes.Nop;
+                                    method.Body.Instructions[arg2.Item2].OpCode = OpCodes.Nop;
                                     method.Body.Instructions[i] = Instruction.Create(OpCodes.Ldstr, decrypted);
                                 }
                            
                             }
                         }
                     }
+                }
+            }
+        }
+        public static void CFLow()
+        {
+            foreach (TypeDef type in module.Types)
+            {
+                foreach (MethodDef method in type.Methods)
+                {
+                    if (method.HasBody == false)
+                        continue;
+                    BlocksCflowDeobfuscator blocksCflowDeobfuscator = new BlocksCflowDeobfuscator();
+                    Blocks blocks = new Blocks(method);
+                    blocksCflowDeobfuscator.Initialize(blocks);
+                    blocksCflowDeobfuscator.Deobfuscate();
+                    blocks.RepartitionBlocks();
+                    IList<Instruction> list;
+                    IList<ExceptionHandler> exceptionHandlers;
+                    blocks.GetCode(out list, out exceptionHandlers);
+                    DotNetUtils.RestoreBody(method, list, exceptionHandlers);
                 }
             }
         }

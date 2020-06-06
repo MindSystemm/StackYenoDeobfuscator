@@ -6,3 +6,5 @@ C:\Users\nicol\source\repos\StackYenoDeobfuscator\StackYenoDeobfuscator\obj\Debu
 C:\Users\nicol\source\repos\StackYenoDeobfuscator\StackYenoDeobfuscator\obj\Debug\StackYenoDeobfuscator.csproj.CopyComplete
 C:\Users\nicol\source\repos\StackYenoDeobfuscator\StackYenoDeobfuscator\obj\Debug\StackYenoDeobfuscator.exe
 C:\Users\nicol\source\repos\StackYenoDeobfuscator\StackYenoDeobfuscator\obj\Debug\StackYenoDeobfuscator.pdb
+C:\Users\nicol\source\repos\StackYenoDeobfuscator\StackYenoDeobfuscator\bin\Debug\de4dot.blocks.dll
+C:\Users\nicol\source\repos\StackYenoDeobfuscator\StackYenoDeobfuscator\bin\Debug\de4dot.blocks.pdb

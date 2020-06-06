@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="de4dot.blocks">
+      <HintPath>..\..\..\..\Desktop\de4dot-master\Debug\net45\de4dot.blocks.dll</HintPath>
+    </Reference>
     <Reference Include="dnlib">
       <HintPath>..\..\..\..\Desktop\de4dot-master\Debug\net45\dnlib.dll</HintPath>
     </Reference>
