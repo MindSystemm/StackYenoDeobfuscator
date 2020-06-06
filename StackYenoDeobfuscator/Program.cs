@@ -75,7 +75,7 @@ namespace StackYenoDeobfuscator
                     Stack stack = new Stack();
                     if (method.HasBody && method.Body.HasInstructions)
                     {
-                        for(int i = 0; i < method.Body.Instructions.Count -1;i++)
+                        for (int i = 0; i < method.Body.Instructions.Count; i++)
                         {
                             if(method.Body.Instructions[i].OpCode == OpCodes.Ldstr)
                             {
