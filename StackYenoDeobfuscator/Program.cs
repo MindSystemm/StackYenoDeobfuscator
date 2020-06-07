@@ -36,9 +36,10 @@ namespace StackYenoDeobfuscator
             {
                 module = ModuleDefMD.Load(args[0]);
             }
-            catch
+            catch(Exception ex)
             {
-
+                Console.WriteLine("Impossible to load module, exception message : {0}", ex.Message);
+                return;
             }
             System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
             watch.Start();
@@ -89,12 +90,10 @@ namespace StackYenoDeobfuscator
                                 System.Tuple<int, int> tuple = new System.Tuple<int, int>(operand, i);
                                 stack.Push(tuple);
                             }
-                            else if(method.Body.Instructions[i].OpCode == OpCodes.Call && method.Body.Instructions[i].Operand is MethodDef)
+                            else if(method.Body.Instructions[i].OpCode == OpCodes.Call && method.Body.Instructions[i].Operand is MethodDef && (MethodDef)method.Body.Instructions[i].Operand == decryption)
                             {
-                                MethodDef op = (MethodDef)method.Body.Instructions[i].Operand;
-                                if (op == decryption)
-                                {
                                     //If method found, we just pop the 2 args and we decrypt the string
+                                    //I also put the index of the instruction to nop it after 
                                     System.Tuple<int, int> arg = (System.Tuple<int, int>)stack.Pop();
                                     System.Tuple<string, int> arg2 = (System.Tuple<string, int>)stack.Pop();
                                     string decrypted = a(arg2.Item1, arg.Item1);
@@ -104,8 +103,6 @@ namespace StackYenoDeobfuscator
                                     method.Body.Instructions[arg.Item2].OpCode = OpCodes.Nop;
                                     method.Body.Instructions[arg2.Item2].OpCode = OpCodes.Nop;
                                     method.Body.Instructions[i] = Instruction.Create(OpCodes.Ldstr, decrypted);
-                                }
-                           
                             }
                         }
                     }
@@ -153,10 +150,8 @@ namespace StackYenoDeobfuscator
                 {
                     if(method.HasBody && method.Body.HasInstructions)
                     {
-                        if (method.ReturnType == module.CorLibTypes.String && method.Parameters.Count ==2)
+                        if (method.ReturnType == module.CorLibTypes.String && method.Parameters.Count ==2 && method.Parameters[0].Type == module.CorLibTypes.String && method.Parameters[1].Type == module.CorLibTypes.Int32)
                         {
-                            if (method.Parameters[0].Type == module.CorLibTypes.String && method.Parameters[1].Type == module.CorLibTypes.Int32)
-                            {
                                 //Storing all the call in a list to avoid loop 
                                 List<Instruction> instr = method.Body.Instructions.Where(o => o.OpCode == OpCodes.Call).ToList();
                                 Instruction Intern = instr.FirstOrDefault(o => o.Operand.ToString().Contains("Intern"));
@@ -166,8 +161,6 @@ namespace StackYenoDeobfuscator
                                 {
                                     return method;
                                 }
-                               
-                            }
                            
                         }
                     }
